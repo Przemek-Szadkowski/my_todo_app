@@ -29,7 +29,7 @@ html {
 .container {
   height: 90vh;
   width: 40%;
-  background-image: url('/img/Texture1.png');
+  background-image: url('../img/Texture1.png');
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 25px;
