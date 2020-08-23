@@ -10,16 +10,25 @@ const tasksArea = document.querySelector('.tasks');
 const tasksCounter = document.querySelector('.howmany');
 
 let counter = 0;
+let isDoubled = false;
 
 const taskArr = [];
 
 function newTodoSecond() {
-    
+    isDoubled = false;
     const task = mainInput.value;
     if(!task) {
         alert("Enter your task!");
     } else {
-        counter++;
+        for(let i=0; i < taskArr.length; i++) {
+            if(taskArr[i].taskText === task) {
+                alert("This task has already exist!");
+                isDoubled = true;
+                mainInput.value = '';
+            }
+        };
+        if(!isDoubled) { // sprawdzenie czy zadanie się nie powtarza
+            counter++;
         let taskObj = {
             taskText: task,
             isChecked: false
@@ -29,7 +38,7 @@ function newTodoSecond() {
         
         const tasksToMap = JSON.parse(localStorage.getItem('tasks'));
         const tasksHtml = tasksToMap.map( task => 
-            `<div class="${classNames.TASK_DIV}"><input type="checkbox" ${task.isChecked ? "checked" : ""} class="${classNames.TASK_CHECKBOX}"<p>${task.taskText}</p><button class="${classNames.DELETE_BUTTON}">Delete</button></div>`
+            `<div class="${classNames.TASK_DIV}"><input type="checkbox" ${task.isChecked ? "checked" : ""} class="${classNames.TASK_CHECKBOX}"><p>${task.taskText}</p><button class="${classNames.DELETE_BUTTON}">Delete</button></div>`
        ).join('');
        tasksArea.innerHTML = tasksHtml;
        mainInput.value = '';
@@ -37,7 +46,14 @@ function newTodoSecond() {
        inputCheck.forEach( input => (
            input.addEventListener('change', checkInput)
        ))
+       const deleteButtons = [...document.querySelectorAll('.delete')];
+       deleteButtons.forEach( button => (
+       button.addEventListener('click', deleteTask)
+    ))
+        }
+        
     }
+    console.log(taskArr)
     const paragraphCounter = document.createElement('p');
     updateParagraphCounter();
 
@@ -74,6 +90,22 @@ function newTodoSecond() {
             console.log(taskArr);
             // saveToStorage();
         }
+    }
+
+    function deleteTask() {
+        if(this.parentElement.firstChild.checked === false) {
+            counter--;
+            updateParagraphCounter();
+        }
+        const textTask = this.previousSibling.textContent;
+        for(let i=0; i < taskArr.length; i++) {
+            if(taskArr[i].taskText === textTask) {
+               taskArr.splice(i, 1);
+            }
+        }
+        
+        // saveToStorage();
+        this.parentElement.remove();
     }
 
     // sprawdzenie czy nie ma dwóch takich samych zadań
