@@ -14,6 +14,30 @@ let isDoubled = false;
 
 const taskArr = [];
 
+const tasksToMap = JSON.parse(localStorage.getItem('tasks'));
+    if(tasksToMap.length !== 0) {
+        for(let i=0; i < tasksToMap.length; i++) {
+            if(tasksToMap[i].isChecked === false) {
+                counter++;
+            }
+            taskArr.push(tasksToMap[i]);
+        }
+    }
+        const paragraphCounter = document.createElement('p');
+        paragraphCounter.textContent = `${counter} ${counter === 1 ? 'task' : 'tasks'} to do!`;
+        tasksCounter.appendChild(paragraphCounter);
+
+        if(tasksToMap.length !== 0) {
+        const tasksHtml = tasksToMap.map( task => 
+        `<div class="${classNames.TASK_DIV}"><input type="checkbox" ${task.isChecked ? "checked" : ""} class="${classNames.TASK_CHECKBOX}"><p>${task.taskText}</p><button class="${classNames.DELETE_BUTTON}">Delete</button></div>`
+        ).join('');
+        tasksArea.innerHTML = tasksHtml;
+        // addEventListener();
+}
+
+// trzeba podpiąć eventlisteney pod checkkboxy i buttony po uploadzie!!!!!
+
+
 function newTodoSecond() {
     isDoubled = false;
     const task = mainInput.value;
@@ -35,25 +59,18 @@ function newTodoSecond() {
         }
         taskArr.push(taskObj);
         saveToStorage(taskArr);
+        loadFromStorage();
         
-        const tasksToMap = JSON.parse(localStorage.getItem('tasks'));
-        const tasksHtml = tasksToMap.map( task => 
-            `<div class="${classNames.TASK_DIV}"><input type="checkbox" ${task.isChecked ? "checked" : ""} class="${classNames.TASK_CHECKBOX}"><p>${task.taskText}</p><button class="${classNames.DELETE_BUTTON}">Delete</button></div>`
-       ).join('');
-       tasksArea.innerHTML = tasksHtml;
+    //     const tasksToMap = JSON.parse(localStorage.getItem('tasks'));
+    //     const tasksHtml = tasksToMap.map( task => 
+    //         `<div class="${classNames.TASK_DIV}"><input type="checkbox" ${task.isChecked ? "checked" : ""} class="${classNames.TASK_CHECKBOX}"><p>${task.taskText}</p><button class="${classNames.DELETE_BUTTON}">Delete</button></div>`
+    //    ).join('');
+    //    tasksArea.innerHTML = tasksHtml;
        mainInput.value = '';
-       const inputCheck = [...document.querySelectorAll('input[type="checkbox"')];
-       inputCheck.forEach( input => (
-           input.addEventListener('change', checkInput)
-       ))
-       const deleteButtons = [...document.querySelectorAll('.delete')];
-       deleteButtons.forEach( button => (
-       button.addEventListener('click', deleteTask)
-    ))
+       addEventListener();
         }
         
     }
-    console.log(taskArr)
     const paragraphCounter = document.createElement('p');
     updateParagraphCounter();
 
@@ -75,8 +92,7 @@ function newTodoSecond() {
                     taskArr[i].isChecked = true;
                 }
             }
-            console.log(taskArr);
-            // saveToStorage();
+            saveToStorage(taskArr);
 
         } else {
             counter++;
@@ -87,8 +103,7 @@ function newTodoSecond() {
                     taskArr[i].isChecked = false;
                 }
             }
-            console.log(taskArr);
-            // saveToStorage();
+            saveToStorage(taskArr);
         }
     }
 
@@ -104,111 +119,126 @@ function newTodoSecond() {
             }
         }
         
-        // saveToStorage();
+        saveToStorage(taskArr);
         this.parentElement.remove();
     }
 
-    // sprawdzenie czy nie ma dwóch takich samych zadań
-    // podpięcie saveTostorage do inputchange
-
+    function addEventListener() {
+        const inputCheck = [...document.querySelectorAll('input[type="checkbox"')];
+        inputCheck.forEach( input => (
+            input.addEventListener('change', checkInput)
+        ))
+        const deleteButtons = [...document.querySelectorAll('.delete')];
+        deleteButtons.forEach( button => (
+        button.addEventListener('click', deleteTask)
+     ))
+    }
 }
 
-function newTodo() {
-    const task = mainInput.value;
-    if(!task) {
-        alert("Enter your task!");
-    } else {
-        counter++;
+// function newTodo() {
+//     const task = mainInput.value;
+//     if(!task) {
+//         alert("Enter your task!");
+//     } else {
+//         counter++;
     
-        const paragraphCounter = document.createElement('p');
-        updateParagraphCounter();
+//         const paragraphCounter = document.createElement('p');
+//         updateParagraphCounter();
 
-        const newDiv = document.createElement('div');
-        newDiv.classList.add(`${classNames.TASK_DIV}`);
-        newDiv.textContent = task;
+//         const newDiv = document.createElement('div');
+//         newDiv.classList.add(`${classNames.TASK_DIV}`);
+//         newDiv.textContent = task;
 
-        const inputCheck = document.createElement('input');
-        inputCheck.setAttribute("type", "checkbox");
-        inputCheck.classList.add(`${classNames.TASK_CHECKBOX}`);
-        inputCheck.addEventListener('change', checkInput);
-        newDiv.insertAdjacentElement("afterbegin", inputCheck);
+//         const inputCheck = document.createElement('input');
+//         inputCheck.setAttribute("type", "checkbox");
+//         inputCheck.classList.add(`${classNames.TASK_CHECKBOX}`);
+//         inputCheck.addEventListener('change', checkInput);
+//         newDiv.insertAdjacentElement("afterbegin", inputCheck);
 
-        const deleteButton = document.createElement('button');
-        deleteButton.classList.add(`${classNames.DELETE_BUTTON}`);
-        deleteButton.textContent = "Delete";
-        deleteButton.addEventListener('click', deleteTask);
-        newDiv.appendChild(deleteButton);
+//         const deleteButton = document.createElement('button');
+//         deleteButton.classList.add(`${classNames.DELETE_BUTTON}`);
+//         deleteButton.textContent = "Delete";
+//         deleteButton.addEventListener('click', deleteTask);
+//         newDiv.appendChild(deleteButton);
 
-        tasksArea.insertAdjacentElement("beforeend", newDiv);
+//         tasksArea.insertAdjacentElement("beforeend", newDiv);
 
-        // zapis START
+//         // zapis START
 
-        let taskObj = {
-            taskText: task,
-            isChecked: inputCheck.checked
-        }
-        taskArr.push(taskObj);
+//         let taskObj = {
+//             taskText: task,
+//             isChecked: inputCheck.checked
+//         }
+//         taskArr.push(taskObj);
 
-        // zapis KONIEC
+//         // zapis KONIEC
 
-        mainInput.value = '';
+//         mainInput.value = '';
 
-        // saveToStorage(taskArr);
-        // mapTasks();
+//         // saveToStorage(taskArr);
+//         // mapTasks();
 
         
 
-        function checkInput() {
-            if(this.checked === true) {
-                counter--;
-                updateParagraphCounter();
+//         function checkInput() {
+//             if(this.checked === true) {
+//                 counter--;
+//                 updateParagraphCounter();
 
-                const textTask = this.nextSibling.textContent;
-                for(let i=0; i < taskArr.length; i++) {
-                    if(taskArr[i].taskText === textTask) {
-                        taskArr[i].isChecked = true;
-                    }
-                }
+//                 const textTask = this.nextSibling.textContent;
+//                 for(let i=0; i < taskArr.length; i++) {
+//                     if(taskArr[i].taskText === textTask) {
+//                         taskArr[i].isChecked = true;
+//                     }
+//                 }
 
-                // saveToStorage();
+//                 // saveToStorage();
 
-            } else {
-                counter++;
-                updateParagraphCounter();
-                const textTask = this.nextSibling.textContent;
-                for(let i=0; i < taskArr.length; i++) {
-                    if(taskArr[i].taskText === textTask) {
-                        taskArr[i].isChecked = false;
-                    }
-                }
-                // saveToStorage();
-            }
-        }
+//             } else {
+//                 counter++;
+//                 updateParagraphCounter();
+//                 const textTask = this.nextSibling.textContent;
+//                 for(let i=0; i < taskArr.length; i++) {
+//                     if(taskArr[i].taskText === textTask) {
+//                         taskArr[i].isChecked = false;
+//                     }
+//                 }
+//                 // saveToStorage();
+//             }
+//         }
 
-        // zapisa obiektu do pamięci w funkcji saveToStorage
-        // wczytanie z pamięći po włączeniu strony
+//         // zapisa obiektu do pamięci w funkcji saveToStorage
+//         // wczytanie z pamięći po włączeniu strony
  
-        function deleteTask() {
-            this.parentElement.remove();
-            if(this.parentElement.firstChild.checked === false) {
-                counter--;
-                updateParagraphCounter();
-            }
-            const textTask = this.previousSibling.textContent;
-            for(let i=0; i < taskArr.length; i++) {
-                if(taskArr[i].taskText === textTask) {
-                   taskArr.splice(i, 1);
-                }
-            }
-            // saveToStorage();
-        }
-    }
-}
+//         function deleteTask() {
+//             this.parentElement.remove();
+//             if(this.parentElement.firstChild.checked === false) {
+//                 counter--;
+//                 updateParagraphCounter();
+//             }
+//             const textTask = this.previousSibling.textContent;
+//             for(let i=0; i < taskArr.length; i++) {
+//                 if(taskArr[i].taskText === textTask) {
+//                    taskArr.splice(i, 1);
+//                 }
+//             }
+//             // saveToStorage();
+//         }
+//     }
+// }
 
 // funkcje zapisu do pamięci i tworzenia zawartośći z pamięci POCZĄTEK
 
 function saveToStorage(arr) {
     localStorage.setItem('tasks', JSON.stringify(arr));
+}
+
+function loadFromStorage() {
+        const tasksToMap = JSON.parse(localStorage.getItem('tasks'));
+        const tasksHtml = tasksToMap.map( task => 
+            `<div class="${classNames.TASK_DIV}"><input type="checkbox" ${task.isChecked ? "checked" : ""} class="${classNames.TASK_CHECKBOX}"><p>${task.taskText}</p><button class="${classNames.DELETE_BUTTON}">Delete</button></div>`
+            ).join('');
+       tasksArea.innerHTML = tasksHtml;
 }
 
 // function mapTasks(tasksToMap) {
@@ -221,7 +251,7 @@ function saveToStorage(arr) {
 
 function keyHandle(e) {
     if(e.keyCode === 13) {
-        newTodo();
+        newTodoSecond();
     }
 }
 
