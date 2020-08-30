@@ -15,10 +15,11 @@ let isDoubled = false;
 const taskArr = [];
 
 const tasksToMap = JSON.parse(localStorage.getItem('tasks'));
+console.log(!!tasksToMap);
 
 //działania przy wczytaniu strony START
     
-    if(tasksToMap.length !== 0) {
+    if(!!tasksToMap) {
         for(let i=0; i < tasksToMap.length; i++) {
             if(tasksToMap[i].isChecked === false) {
                 counter++;
@@ -31,7 +32,7 @@ const tasksToMap = JSON.parse(localStorage.getItem('tasks'));
     paragraphCounter.textContent = `${counter} ${counter === 1 ? 'task' : 'tasks'} to do!`;
     tasksCounter.appendChild(paragraphCounter);
 
-    if(tasksToMap.length !== 0) {
+    if(!!tasksToMap) {
     const tasksHtml = tasksToMap.map( task => 
     `<div class="${classNames.TASK_DIV}"><input type="checkbox" ${task.isChecked ? "checked" : ""} class="${classNames.TASK_CHECKBOX}"><p>${task.taskText}</p><button class="${classNames.DELETE_BUTTON}">Delete</button></div>`
     ).join('');
