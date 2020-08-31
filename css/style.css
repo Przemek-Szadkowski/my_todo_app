@@ -106,6 +106,8 @@ button:hover {
   scrollbar-width: none;  /* Firefox */
 }
 
+/* END */
+
 .task {
   padding: 20px 10px;
   display: flex;
@@ -131,6 +133,8 @@ input.check {
   margin-left: 5%;
   margin-right: 2%;
 }
+
+/* media queries*/
 
 @media(max-width: 900px) {
   .container {

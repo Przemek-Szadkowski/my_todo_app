@@ -15,7 +15,6 @@ let isDoubled = false;
 const taskArr = [];
 
 const tasksToMap = JSON.parse(localStorage.getItem('tasks'));
-console.log(!!tasksToMap);
 
 //działania przy wczytaniu strony START
     
