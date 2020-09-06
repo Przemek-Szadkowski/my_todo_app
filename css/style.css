@@ -128,10 +128,16 @@ input.check {
 }
 
 .delete {
-  width: 15%;
+  min-width: 12%;
   font-size: .9rem;
   margin-left: 5%;
   margin-right: 2%;
+  background-color: #333;
+  color: white;
+}
+
+.delete:hover {
+  background-color: #777;
 }
 
 /* media queries*/
