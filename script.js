@@ -46,7 +46,13 @@ const tasksToMap = JSON.parse(localStorage.getItem('tasks'));
 
 function newTodoSecond() {
     isDoubled = false;
-    const task = mainInput.value;
+
+    /*sanitize START*/
+
+    const task = DOMPurify.sanitize(mainInput.value, { ALLOWED_TAGS: ['#text']});
+    
+    /*sanitize END*/
+
     if(!task) {
         alert("Enter your task!");
     } else {
