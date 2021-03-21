@@ -1,6 +1,6 @@
 ![my idea](inspired_by.png)
 
-# Retrofabryka---new
+# my_todo_app
 > Simple TODO app
 
 ## Table of contents
@@ -31,8 +31,8 @@ TODO app uses DOMPurify - sanitizer (https://github.com/cure53/DOMPurify). And s
 * HTML
 * CSS
 * Javascript
-* SCSS
-* Lightbox library
+* JSON
+* DOMPurify
 
 ## Features
 
